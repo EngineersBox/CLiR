@@ -1,4 +1,6 @@
 #define _USE_MATH_DEFINES
+#define GL_SILENCE_DEPRECATION
+
 #include <stdlib.h>
 #include <math.h>
 #include <stdbool.h>
@@ -7,6 +9,7 @@
 #include <GLFW/glfw3.h>
 
 #include "defines.h"
+#include "buffer/framebuffer.h"
 
 GLFWwindow* initGL(const int width, const int height, const char* title) {
     glfwInit();
@@ -30,7 +33,7 @@ GLFWwindow* initGL(const int width, const int height, const char* title) {
         exit(1);
     }
 
-    glfwSetKeyCallback(window, keyCallback);
+    /*glfwSetKeyCallback(window, keyCallback);*/
 //    if (glfwRawMouseMotionSupported() == GLFW_TRUE) {
 //        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 //#ifdef RAW_MOUSE_INPUT
