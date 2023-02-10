@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.21)
 set(PROJECT_TARGET CLiR)
 project(${PROJECT_TARGET} C)
 
-set(CMAKE_C_STANDARD 20)
+set(CMAKE_C_STANDARD 17)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
 # ---- BUILDS ---- #
@@ -55,9 +55,10 @@ set(CMAKE_C_FLAGS_UBSAN
         FORCE)
 
 message("[${PROJECT_TARGET}] Configured build type: ${CMAKE_BUILD_TYPE}")
+
 # Include source content
-file (GLOB_RECURSE CLiR_SOURCES CONFIGURE_DEPENDS "src/*.cpp")
-file (GLOB_RECURSE CLiR_HEADERS CONFIGURE_DEPENDS "src/*.hpp")
+file (GLOB_RECURSE CLiR_SOURCES CONFIGURE_DEPENDS "src/*.c")
+file (GLOB_RECURSE CLiR_HEADERS CONFIGURE_DEPENDS "src/*.h")
 
 set (CLiR_INCLUDE_DIRS "")
 foreach (_headerFile ${CLiR_HEADERS})
@@ -69,6 +70,11 @@ list (REMOVE_DUPLICATES CLiR_INCLUDE_DIRS)
 # Mark executable
 add_executable(CLiR ${CLiR_SOURCES})
 target_include_directories(CLiR PRIVATE ${CLiR_INCLUDE_DIRS})
+
+# ---- LIBS ---- #
+
+# PkgConfig
+find_package(PkgConfig REQUIRED)
 
 # OpenGL
 find_package(OpenGL REQUIRED)
@@ -96,22 +102,4 @@ target_link_libraries(CLiR PRIVATE glm::glm)
 # spdlog
 find_package(spdlog CONFIG REQUIRED)
 target_link_libraries(CLiR PRIVATE spdlog::spdlog spdlog::spdlog_header_only)
-
-# boost
-find_package(Boost REQUIRED COMPONENTS filesystem iostreams)
-if (NOT TARGET Boost::filesystem)
-    add_library(Boost::filesystem IMPORTED INTERFACE)
-    set_property(TARGET Boost::filesystem PROPERTY
-            INTERFACE_INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
-    set_property(TARGET Boost::filesystem PROPERTY
-            INTERFACE_LINK_LIBRARIES ${Boost_LIBRARIES})
-endif()
-if (NOT TARGET Boost::iostreams)
-    add_library(Boost::iostreams IMPORTED INTERFACE)
-    set_property(TARGET Boost::iostreams PROPERTY
-            INTERFACE_INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
-    set_property(TARGET Boost::iostreams PROPERTY
-            INTERFACE_LINK_LIBRARIES ${Boost_LIBRARIES})
-endif()
-target_link_libraries(CLiR PRIVATE Boost::filesystem Boost::iostreams)
 
