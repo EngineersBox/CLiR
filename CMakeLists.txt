@@ -68,8 +68,8 @@ endforeach()
 list (REMOVE_DUPLICATES CLiR_INCLUDE_DIRS)
 
 # Mark executable
-add_executable(CLiR ${CLiR_SOURCES})
-target_include_directories(CLiR PRIVATE ${CLiR_INCLUDE_DIRS})
+add_executable(${PROJECT_TARGET} ${CLiR_SOURCES})
+target_include_directories(${PROJECT_TARGET} PRIVATE ${CLiR_INCLUDE_DIRS})
 
 # ---- LIBS ---- #
 
@@ -78,28 +78,28 @@ find_package(PkgConfig REQUIRED)
 
 # OpenGL
 find_package(OpenGL REQUIRED)
-target_include_directories(CLiR PUBLIC ${OPENGL_INCLUDE_DIR})
-target_include_directories(CLiR PUBLIC ${OPENGL_LIBRARIES})
-target_link_libraries(CLiR PUBLIC ${OPENGL_LIBRARIES})
+target_include_directories(${PROJECT_TARGET} PUBLIC ${OPENGL_INCLUDE_DIR})
+target_include_directories(${PROJECT_TARGET} PUBLIC ${OPENGL_LIBRARIES})
+target_link_libraries(${PROJECT_TARGET} PUBLIC ${OPENGL_LIBRARIES})
 
 # OpenCL
 find_package(OpenCL REQUIRED)
-target_link_libraries(CLiR PRIVATE ${OpenCL_LIBRARIES})
-target_include_directories(CLiR PRIVATE ${OpenCL_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_TARGET} PRIVATE ${OpenCL_LIBRARIES})
+target_include_directories(${PROJECT_TARGET} PRIVATE ${OpenCL_INCLUDE_DIRS})
 
 # GLFW 3
 find_package(glfw3 CONFIG REQUIRED)
-target_link_libraries(CLiR PRIVATE glfw)
+target_link_libraries(${PROJECT_TARGET} PRIVATE glfw)
 
-# GLEW
-find_package(GLEW REQUIRED)
-target_link_libraries(CLiR PRIVATE GLEW::GLEW)
+# GLAD
+find_package(glad CONFIG REQUIRED)
+target_link_libraries(${PROJECT_TARGET} PRIVATE glad::glad)
 
 # GLM
 find_package(glm CONFIG REQUIRED)
-target_link_libraries(CLiR PRIVATE glm::glm)
+target_link_libraries(${PROJECT_TARGET} PRIVATE glm::glm)
 
 # spdlog
 find_package(spdlog CONFIG REQUIRED)
-target_link_libraries(CLiR PRIVATE spdlog::spdlog spdlog::spdlog_header_only)
+target_link_libraries(${PROJECT_TARGET} PRIVATE spdlog::spdlog spdlog::spdlog_header_only)
 
